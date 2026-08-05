@@ -9,7 +9,12 @@ class TagController extends Controller
 {
     public function index()
     {
-        return response()->json(Tag::all(), 200);
+        $tags = Tag::all();
+        return view('tags.index', compact('tags'));
+    }
+    public function create()
+    {
+        return view('tags.create');
     }
 
     public function store(Request $request)
@@ -17,31 +22,48 @@ class TagController extends Controller
         $request->validate([
             'name' => 'required|max:255|unique:tags,name'
         ]);
-
-        $tag = Tag::create($request->all());
-
-        return response()->json($tag, 201);
+        Tag::create($request->all());
+        return redirect()->route('tags.index');
     }
 
-    public function show(Tag $tag)
+    public function show($id)
     {
-        return response()->json($tag, 200);
+        $tag = Tag::find($id);
+        if (!$tag) {
+            return redirect()->route('tags.index')->with('error', 'La etiqueta no existe o ya fue eliminada.');
+        }
+        return view('tags.show', compact('tag'));
     }
 
-    public function update(Request $request, Tag $tag)
+    public function edit($id)
     {
+        $tag = Tag::find($id);
+        if (!$tag) {
+            return redirect()->route('tags.index')->with('error', 'La etiqueta no existe o ya fue eliminada.');
+        }
+        return view('tags.edit', compact('tag'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $tag = Tag::find($id);
+        if (!$tag) {
+            return redirect()->route('tags.index')->with('error', 'La etiqueta no existe o ya fue eliminada.');
+        }
         $request->validate([
-            'name' => 'required|max:255|unique:tags,name,' . $tag->id
+            'name' => 'required|max:255|unique:tags,name,' . $id
         ]);
-
         $tag->update($request->all());
-
-        return response()->json($tag, 200);
+        return redirect()->route('tags.index');
     }
 
-    public function destroy(Tag $tag)
+    public function destroy($id)
     {
+        $tag = Tag::find($id);
+        if (!$tag) {
+            return redirect()->route('tags.index')->with('error', 'La etiqueta ya había sido eliminada.');
+        }
         $tag->delete();
-        return response()->json(['message' => 'Tag deleted successfully'], 200);
+        return redirect()->route('tags.index');
     }
 }

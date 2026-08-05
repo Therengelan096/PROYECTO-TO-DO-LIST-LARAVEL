@@ -9,7 +9,12 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return response()->json(Category::all(), 200);
+        $categories = Category::all();
+        return view('categories.index', compact('categories'));
+    }
+    public function create()
+    {
+        return view('categories.create');
     }
 
     public function store(Request $request)
@@ -17,31 +22,49 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|max:255|unique:categories,name'
         ]);
-
-        $category = Category::create($request->all());
-
-        return response()->json($category, 201);
+        Category::create($request->all());
+        return redirect()->route('categories.index');
     }
 
-    public function show(Category $category)
+    public function show($id)
     {
-        return response()->json($category, 200);
+        $category = Category::find($id);
+        if (!$category) {
+            return redirect()->route('categories.index')->with('error', 'La categoría no existe o ya fue eliminada.');
+        }
+        return view('categories.show', compact('category'));
     }
 
-    public function update(Request $request, Category $category)
+    public function edit($id)
     {
+        $category = Category::find($id);
+        if (!$category) {
+            return redirect()->route('categories.index')->with('error', 'La categoría no existe o ya fue eliminada.');
+        }
+        return view('categories.edit', compact('category'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $category = Category::find($id);
+        if (!$category) {
+            return redirect()->route('categories.index')->with('error', 'La categoría no existe o ya fue eliminada.');
+        }
         $request->validate([
-            'name' => 'required|max:255|unique:categories,name,' . $category->id
+            'name' => 'required|max:255|unique:categories,name,' . $id
         ]);
-
         $category->update($request->all());
 
-        return response()->json($category, 200);
+        return redirect()->route('categories.index');
     }
 
-    public function destroy(Category $category)
+    public function destroy($id)
     {
+        $category = Category::find($id);
+        if (!$category) {
+            return redirect()->route('categories.index')->with('error', 'La categoría ya había sido eliminada.');
+        }
         $category->delete();
-        return response()->json(['message' => 'Category deleted successfully'], 200);
+        return redirect()->route('categories.index');
     }
 }
