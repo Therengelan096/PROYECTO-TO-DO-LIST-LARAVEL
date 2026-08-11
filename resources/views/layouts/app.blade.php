@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('tasks.index') }}">To-Do List</a>
+            <a class="navbar-brand" href="{{ route('tasks.index') }}">TO-DO LIST</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="{{ route('tasks.index') }}">Tareas</a></li>
