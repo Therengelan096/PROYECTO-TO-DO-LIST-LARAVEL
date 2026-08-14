@@ -20,7 +20,7 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:255|unique:tags,name'
+            'name' => 'required|max:30|unique:tags,name'
         ]);
         Tag::create($request->all());
         return redirect()->route('tags.index');
@@ -51,7 +51,7 @@ class TagController extends Controller
             return redirect()->route('tags.index')->with('error', 'La etiqueta no existe o ya fue eliminada.');
         }
         $request->validate([
-            'name' => 'required|max:255|unique:tags,name,' . $id
+            'name' => 'required|max:30|unique:tags,name,' . $id
         ]);
         $tag->update($request->all());
         return redirect()->route('tags.index');

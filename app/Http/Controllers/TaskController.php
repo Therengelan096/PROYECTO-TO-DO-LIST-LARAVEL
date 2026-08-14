@@ -25,7 +25,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|max:30',
             'description' => 'nullable',
             'category_id' => 'required|exists:categories,id',
             'tags' => 'nullable|array',
@@ -71,7 +71,7 @@ class TaskController extends Controller
             return redirect()->route('tasks.index')->with('error', 'La tarea no existe o ya fue eliminada.');
         }
         $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|max:30',
             'description' => 'nullable',
             'category_id' => 'required|exists:categories,id',
             'tags' => 'nullable|array',

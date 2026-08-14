@@ -20,7 +20,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:255|unique:categories,name'
+            'name' => 'required|max:50|unique:categories,name'
         ]);
         Category::create($request->all());
         return redirect()->route('categories.index');
@@ -51,7 +51,7 @@ class CategoryController extends Controller
             return redirect()->route('categories.index')->with('error', 'La categoría no existe o ya fue eliminada.');
         }
         $request->validate([
-            'name' => 'required|max:255|unique:categories,name,' . $id
+            'name' => 'required|max:50|unique:categories,name,' . $id
         ]);
         $category->update($request->all());
 
